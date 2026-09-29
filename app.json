@@ -12,13 +12,12 @@
       "icon": "./assets/logo/movie-roulette-logo-with-background.png"
     },
     "android": {
+      "package": "com.christophvorer.movieroulette",
       "adaptiveIcon": {
-        "package": "com.christophvorer.movieroulette",
         "backgroundColor": "#0B0B0D",
         "foregroundImage": "./assets/logo/movie-roulette-logo.png"
       },
-      "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.movierouletteapp"
+      "predictiveBackGestureEnabled": false
     },
     "web": {
       "output": "static",
