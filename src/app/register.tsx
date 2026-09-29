@@ -1,4 +1,4 @@
-import { MRSecondaryButton } from '@/components/MRSecondaryButton';
+import { MRBackButton } from '@/components/MRBackButton';
 import { MRTextInput } from '@/components/MRTextInput';
 import { colors } from '@/theme/standardTheme';
 import { MRPrimaryButton } from '@components/MRPrimaryButton';
@@ -10,21 +10,25 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function LoginScreen() {
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [repeatedPassword, setRepeatedPassword] = useState('');
 
+  const emailInputRef = useRef<TextInput>(null);
   const passwordInputRef = useRef<TextInput>(null);
-
-  const handleLogin = () => {
-    router.replace('/home');
-  };
+  const repeatPasswordInputRef = useRef<TextInput>(null);
 
   const handleRegister = () => {
-    router.push('/register');
+    router.replace('/home');
   };
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <MRBackButton />
+      </View>
+
       <KeyboardAwareScrollView
         contentContainerStyle={styles.content}
         bottomOffset={24}
@@ -40,9 +44,19 @@ export default function LoginScreen() {
 
         <View style={styles.form}>
           <Text style={styles.title}>Movie Roulette</Text>
-          <Text style={styles.subtitle}>Melde dich an, um fortzufahren.</Text>
+          <Text style={styles.subtitle}>Registriere dich bei uns</Text>
 
           <MRTextInput
+            value={username}
+            onChangeText={setUsername}
+            placeholder="Username"
+            autoCapitalize="none"
+            returnKeyType="next"
+            onSubmitEditing={() => emailInputRef.current?.focus()}
+          />
+
+          <MRTextInput
+            ref={emailInputRef}
             value={email}
             onChangeText={setEmail}
             placeholder="E-Mail"
@@ -58,20 +72,19 @@ export default function LoginScreen() {
             onChangeText={setPassword}
             placeholder="Passwort"
             isPassword
+            onSubmitEditing={() => repeatPasswordInputRef.current?.focus()}
+          />
+
+          <MRTextInput
+            ref={repeatPasswordInputRef}
+            value={repeatedPassword}
+            onChangeText={setRepeatedPassword}
+            placeholder="Passwort bestätigen"
+            isPassword
             returnKeyType="done"
           />
 
-          <MRPrimaryButton title="Anmelden" onPress={handleLogin} />
-
-          <View style={styles.divider}>
-            <View style={styles.dividerLine} />
-
-            <Text style={styles.dividerText}>Noch kein Konto?</Text>
-
-            <View style={styles.dividerLine} />
-          </View>
-
-          <MRSecondaryButton title="Konto erstellen" onPress={handleRegister} />
+          <MRPrimaryButton title="Registrieren" onPress={handleRegister} />
         </View>
       </KeyboardAwareScrollView>
     </SafeAreaView>
@@ -82,6 +95,13 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.background,
     flex: 1,
+  },
+
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    paddingHorizontal: 16,
+    paddingTop: 8,
   },
 
   content: {
@@ -119,23 +139,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
     marginBottom: 16,
-  },
-
-  divider: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    marginVertical: 8,
-  },
-
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: colors.border,
-  },
-
-  dividerText: {
-    color: colors.textMuted,
-    fontSize: 14,
   },
 });
