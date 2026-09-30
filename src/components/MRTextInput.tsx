@@ -6,6 +6,7 @@ import { forwardRef, useState } from 'react';
 import {
   Pressable,
   StyleSheet,
+  Text,
   TextInput,
   TextInputProps,
   View,
@@ -13,6 +14,7 @@ import {
 
 type MRTextInputProps = TextInputProps & {
   isPassword?: boolean;
+  error?: string;
 };
 
 export const MRTextInput = forwardRef<TextInput, MRTextInputProps>(
@@ -22,6 +24,7 @@ export const MRTextInput = forwardRef<TextInput, MRTextInputProps>(
       placeholderTextColor = colors.textMuted,
       isPassword = false,
       secureTextEntry,
+      error,
       ...props
     },
     ref,
@@ -32,39 +35,48 @@ export const MRTextInput = forwardRef<TextInput, MRTextInputProps>(
 
     return (
       <View style={styles.container}>
-        <TextInput
-          ref={ref}
-          {...props}
-          secureTextEntry={isSecure}
-          placeholderTextColor={placeholderTextColor}
-          style={[styles.input, style]}
-        />
+        <View style={styles.inputContainer}>
+          <TextInput
+            ref={ref}
+            {...props}
+            secureTextEntry={isSecure}
+            placeholderTextColor={placeholderTextColor}
+            style={[
+              styles.input,
+              error && styles.inputError,
+              isPassword && styles.passwordInput,
+              style,
+            ]}
+          />
 
-        {isPassword && (
-          <Pressable
-            onPress={() => setPasswordVisible((visible) => !visible)}
-            style={styles.eyeButton}
-            hitSlop={8}
-          >
-            <SymbolView
-              name={
-                passwordVisible
-                  ? {
-                      ios: 'eye.slash',
-                      android: 'visibility_off',
-                      web: 'visibility_off',
-                    }
-                  : {
-                      ios: 'eye',
-                      android: 'visibility',
-                      web: 'visibility',
-                    }
-              }
-              size={20}
-              tintColor={colors.textMuted}
-            />
-          </Pressable>
-        )}
+          {isPassword && (
+            <Pressable
+              onPress={() => setPasswordVisible((visible) => !visible)}
+              style={styles.eyeButton}
+              hitSlop={8}
+            >
+              <SymbolView
+                name={
+                  passwordVisible
+                    ? {
+                        ios: 'eye.slash',
+                        android: 'visibility_off',
+                        web: 'visibility_off',
+                      }
+                    : {
+                        ios: 'eye',
+                        android: 'visibility',
+                        web: 'visibility',
+                      }
+                }
+                size={20}
+                tintColor={error ? styles.errorColor.color : colors.textMuted}
+              />
+            </Pressable>
+          )}
+        </View>
+
+        {error && <Text style={styles.errorText}>{error}</Text>}
       </View>
     );
   },
@@ -74,6 +86,10 @@ MRTextInput.displayName = 'MRTextInput';
 
 const styles = StyleSheet.create({
   container: {
+    gap: 6,
+  },
+
+  inputContainer: {
     position: 'relative',
     justifyContent: 'center',
   },
@@ -85,8 +101,25 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 12,
-    paddingRight: 48,
     fontSize: 16,
+  },
+
+  passwordInput: {
+    paddingRight: 48,
+  },
+
+  inputError: {
+    borderColor: '#dc2626',
+  },
+
+  errorText: {
+    color: '#dc2626',
+    fontSize: 13,
+    paddingHorizontal: 4,
+  },
+
+  errorColor: {
+    color: '#dc2626',
   },
 
   eyeButton: {

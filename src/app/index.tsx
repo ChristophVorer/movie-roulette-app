@@ -1,3 +1,5 @@
+import { ApiError } from '@/api/ApiError';
+import { login } from '@/api/authApi';
 import { MRSecondaryButton } from '@/components/MRSecondaryButton';
 import { MRTextInput } from '@/components/MRTextInput';
 import { colors } from '@/theme/standardTheme';
@@ -5,18 +7,49 @@ import { MRPrimaryButton } from '@components/MRPrimaryButton';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { useRef, useState } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const passwordInputRef = useRef<TextInput>(null);
 
-  const handleLogin = () => {
-    router.replace('/home');
+  const handleLogin = async () => {
+    setIsLoading(true);
+    setErrorMessage(null);
+
+    try {
+      await login({
+        email,
+        password,
+      });
+
+      router.replace('/home');
+    } catch (error) {
+      if (error instanceof ApiError) {
+        setErrorMessage(
+          error.problem?.detail ??
+            'Ein Fehler ist aufgetreten. Bitte versuche es später erneut.',
+        );
+      } else {
+        setErrorMessage(
+          'Ein Fehler ist aufgetreten. Bitte versuche es später erneut.',
+        );
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleRegister = () => {
@@ -61,7 +94,18 @@ export default function LoginScreen() {
             returnKeyType="done"
           />
 
-          <MRPrimaryButton title="Anmelden" onPress={handleLogin} />
+          {errorMessage && (
+            <Text style={styles.errorMessage}>{errorMessage}</Text>
+          )}
+
+          {isLoading ? (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="small" color={colors.primary} />
+              <Text style={styles.loadingText}>Anmeldung läuft...</Text>
+            </View>
+          ) : (
+            <MRPrimaryButton title="Anmelden" onPress={handleLogin} />
+          )}
 
           <View style={styles.divider}>
             <View style={styles.dividerLine} />
@@ -119,6 +163,25 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
     marginBottom: 16,
+  },
+
+  errorMessage: {
+    fontSize: 14,
+    textAlign: 'center',
+    color: '#dc2626',
+  },
+
+  loadingContainer: {
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  },
+
+  loadingText: {
+    color: colors.textMuted,
+    fontSize: 14,
   },
 
   divider: {
