@@ -270,11 +270,11 @@ const styles = StyleSheet.create({
   },
 
   passwordHintError: {
-    color: '#dc2626',
+    color: colors.error,
   },
 
   errorMessage: {
-    color: '#dc2626',
+    color: colors.error,
     fontSize: 14,
     textAlign: 'center',
   },

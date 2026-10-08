@@ -1,1 +1,7 @@
 # Movie Roulette - App
+
+## Lizenz / Nutzungshinweis
+
+Copyright © 2026 Christoph Vorer. Alle Rechte vorbehalten.
+
+Dieses Repository ist ausschließlich zur Einsicht und Bewertung öffentlich zugänglich. Eine Vervielfältigung, Veränderung, Verbreitung oder anderweitige Nutzung des Quellcodes ist ohne vorherige schriftliche Genehmigung nicht gestattet.
