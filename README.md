@@ -1,7 +1,9 @@
-# Movie Roulette - App
+# Movie Roulette App
 
-## Lizenz / Nutzungshinweis
+[![CI](https://github.com/ChristophVorer/movie-roulette-app/actions/workflows/ci.yml/badge.svg)](https://github.com/ChristophVorer/movie-roulette-app/actions/workflows/ci.yml)
 
-Copyright © 2026 Christoph Vorer. Alle Rechte vorbehalten.
+React Native and Expo mobile app for discovering movies, powered by a custom Spring Boot backend.
 
-Dieses Repository ist ausschließlich zur Einsicht und Bewertung öffentlich zugänglich. Eine Vervielfältigung, Veränderung, Verbreitung oder anderweitige Nutzung des Quellcodes ist ohne vorherige schriftliche Genehmigung nicht gestattet.
+## License
+
+All rights reserved. See [LICENSE](LICENSE) for details.
