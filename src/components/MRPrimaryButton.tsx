@@ -1,4 +1,4 @@
-import { colors } from '@theme/standardTheme';
+import { colors } from '@/theme/standardTheme';
 import { Pressable, StyleSheet, Text } from 'react-native';
 
 type PrimaryButtonProps = {

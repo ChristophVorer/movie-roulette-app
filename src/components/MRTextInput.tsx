@@ -54,6 +54,10 @@ export const MRTextInput = forwardRef<TextInput, MRTextInputProps>(
               onPress={() => setPasswordVisible((visible) => !visible)}
               style={styles.eyeButton}
               hitSlop={8}
+              accessibilityRole="button"
+              accessibilityLabel={
+                passwordVisible ? 'Passwort verbergen' : 'Passwort anzeigen'
+              }
             >
               <SymbolView
                 name={

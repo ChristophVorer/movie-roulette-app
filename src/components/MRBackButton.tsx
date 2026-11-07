@@ -10,6 +10,8 @@ export function MRBackButton() {
     <Pressable
       onPress={() => router.back()}
       hitSlop={10}
+      accessibilityRole="button"
+      accessibilityLabel="Zurück"
       style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
     >
       <SymbolView
