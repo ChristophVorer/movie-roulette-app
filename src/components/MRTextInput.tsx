@@ -1,5 +1,3 @@
-// src/components/MRTextInput.tsx
-
 import { colors } from '@/theme/standardTheme';
 import { SymbolView } from 'expo-symbols';
 import { forwardRef, useState } from 'react';
@@ -74,7 +72,7 @@ export const MRTextInput = forwardRef<TextInput, MRTextInputProps>(
                       }
                 }
                 size={20}
-                tintColor={error ? styles.errorColor.color : colors.textMuted}
+                tintColor={error ? colors.error : colors.textMuted}
               />
             </Pressable>
           )}
@@ -113,17 +111,13 @@ const styles = StyleSheet.create({
   },
 
   inputError: {
-    borderColor: '#dc2626',
+    borderColor: colors.error,
   },
 
   errorText: {
-    color: '#dc2626',
+    color: colors.error,
     fontSize: 13,
     paddingHorizontal: 4,
-  },
-
-  errorColor: {
-    color: '#dc2626',
   },
 
   eyeButton: {
