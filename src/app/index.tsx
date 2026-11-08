@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
   errorMessage: {
     fontSize: 14,
     textAlign: 'center',
-    color: '#dc2626',
+    color: colors.error,
   },
 
   loadingContainer: {

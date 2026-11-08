@@ -2,9 +2,14 @@ import { ApiError } from '@/api/ApiError';
 import { isValidationProblem } from '@/api/apiErrorUtils';
 import { register } from '@/api/authApi';
 import { MRBackButton } from '@/components/MRBackButton';
+import { MRPrimaryButton } from '@/components/MRPrimaryButton';
 import { MRTextInput } from '@/components/MRTextInput';
 import { colors } from '@/theme/standardTheme';
-import { MRPrimaryButton } from '@components/MRPrimaryButton';
+import {
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_MIN_LENGTH,
+  validatePassword,
+} from '@/validation/password';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { useRef, useState } from 'react';
@@ -45,13 +50,21 @@ export default function RegisterScreen() {
 
   const handleRegister = async () => {
     setErrorMessage(null);
-    setFieldErrors({});
+
+    const passwordErrors = validatePassword(password);
+    const localErrors: FieldErrors = {};
+
+    if (passwordErrors.length > 0) {
+      localErrors.password = passwordErrors.join(' ');
+    }
 
     if (password !== repeatedPassword) {
-      setFieldErrors({
-        repeatedPassword: 'Die Passwörter stimmen nicht überein.',
-      });
+      localErrors.repeatedPassword = 'Die Passwörter stimmen nicht überein.';
+    }
 
+    setFieldErrors(localErrors);
+
+    if (Object.keys(localErrors).length > 0) {
       return;
     }
 
@@ -78,7 +91,9 @@ export default function RegisterScreen() {
               field === 'email' ||
               field === 'password'
             ) {
-              validationErrors[field] = validationError.message;
+              validationErrors[field] = validationErrors[field]
+                ? `${validationErrors[field]} ${validationError.message}`
+                : validationError.message;
             }
           });
 
@@ -166,15 +181,13 @@ export default function RegisterScreen() {
               error={fieldErrors.password}
             />
 
-            <Text
-              style={[
-                styles.passwordHint,
-                fieldErrors.password && styles.passwordHintError,
-              ]}
-            >
-              Das Passwort muss mindestens 8 Zeichen sowie Groß- und
-              Kleinbuchstaben, eine Zahl und ein Sonderzeichen enthalten.
-            </Text>
+            {!fieldErrors.password && (
+              <Text style={styles.passwordHint}>
+                Das Passwort muss {PASSWORD_MIN_LENGTH} bis{' '}
+                {PASSWORD_MAX_LENGTH} Zeichen lang sein sowie Groß- und
+                Kleinbuchstaben, eine Zahl und ein Sonderzeichen enthalten.
+              </Text>
+            )}
           </View>
 
           <MRTextInput
@@ -267,10 +280,6 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     fontSize: 13,
     paddingHorizontal: 4,
-  },
-
-  passwordHintError: {
-    color: colors.error,
   },
 
   errorMessage: {
