@@ -13,6 +13,7 @@ updates:
     schedule:
       interval: weekly
     ignore:
+      # Versions managed by the Expo SDK, update via `npx expo install --fix`
       - dependency-name: 'expo'
       - dependency-name: 'expo-*'
       - dependency-name: '@expo/*'
@@ -26,6 +27,9 @@ updates:
       - dependency-name: 'react-native-*'
       - dependency-name: '@types/react'
       - dependency-name: 'typescript'
+      # Major versions must match eslint-config-expo, upgrade together with the Expo SDK
+      - dependency-name: 'eslint'
+        update-types: ['version-update:semver-major']
     groups:
       npm-minor-and-patch:
         update-types: [minor, patch]
